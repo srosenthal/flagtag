@@ -4,6 +4,8 @@
   "description": "",
   "main": "matter.js",
   "scripts": {
+    "start": "node server.js",
+    "dev": "webpack && npm start",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +24,7 @@
     "webpack": "^3.5.4"
   },
   "dependencies": {
+    "express": "^4.15.4",
     "matter-js": "^0.13.0"
   }
 }
