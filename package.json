@@ -7,7 +7,7 @@
     "start": "node server.js",
     "dev": "webpack && npm start",
     "build": "webpack",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress"
+    "heroku-postbuild": "npm build"
   },
   "repository": {
     "type": "git",
