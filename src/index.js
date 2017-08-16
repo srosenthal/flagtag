@@ -1,24 +1,5 @@
-<!DOCTYPE html>
-<head>
-<title>Flag Tag</title>
-<meta name="author" content="Stephen Rosenthal">
-<script src="matter.js" type="text/javascript"></script>
-</head>
-<style>
-body {
-    margin:0px;
-}
-
-#cv {
-    position: absolute;
-    background-color: #000000
-}
-</style>
-<body>
-
-<canvas id="cv" width="1000" height="1000"></canvas>
-
-<script language="JavaScript">
+import Matter from 'matter-js'
+import MouseConstraint from 'matter-js'
 
 const KEY_W = 87;
 const KEY_A = 65;
@@ -66,10 +47,10 @@ var Engine = Matter.Engine,
 var engine = Engine.create();
 
 // Lower the gravity!
-engine.world.gravity.y = 0.05;
+engine.world.gravity.y = 0.0;
 
 // hook in mouse control
-mouseConstraint = MouseConstraint.create(engine, { element: c });
+var mouseConstraint = MouseConstraint.create(engine, { element: c });
 
 var stackA = Composites.stack(window.innerWidth/2 -75, 150, 15, 15, 2, 2, function(x, y) {
     return Bodies.circle(x, y, 3,{friction:0});
@@ -301,7 +282,3 @@ document.body.addEventListener("keyup", function(e) {
 document.body.addEventListener("keydown", function(e) {
   keys[e.keyCode] = true;
 });
-
-
-</script>
-</body>
