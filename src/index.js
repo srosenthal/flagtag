@@ -1,5 +1,4 @@
 import Matter from 'matter-js'
-import MouseConstraint from 'matter-js'
 
 const KEY_W = 87;
 const KEY_A = 65;
@@ -14,14 +13,11 @@ const KEY_RIGHT = 39;
 const KEY_SPACE = 32;
 const KEY_SHIFT = 16;
 
-var playerOnFloor = false;
-
 
 var c = document.getElementById("cv");
 var ctx = c.getContext("2d");
 c.width = window.innerWidth;
 c.height = window.innerHeight;
-//document.body.appendChild(c);
 
 window.onresize = function(event) {
     c.width = window.innerWidth;
@@ -57,23 +53,18 @@ var stackA = Composites.stack(window.innerWidth/2 -75, 150, 15, 15, 2, 2, functi
 });
 
 //access stackA elements with:   stackA.bodies[i]   i = 1 through 6x6
-var playerBody = Bodies.circle(window.innerWidth/2,225,10,{density:0.002, friction:0.5});
-var playerFloorSensor = Bodies.circle(window.innerWidth/2,245,2,{density:0, friction:0.3, isSensor: true});
+var player1Body = Bodies.circle(window.innerWidth/2,225,10,{density:0.002, friction:0.5});
+
+var player1 = Body.create({
+            parts: [player1Body],
+            friction:0
+});
+player1Body.col = '#F45252'; // red
 
 var player2Body = Bodies.circle(window.innerWidth/2,225,10,{density:0.002, friction:0.5});
 
-var player = Body.create({
-            parts: [playerBody
-              //, playerFloorSensor
-            ],
-            friction:0
-});
-playerBody.col = '#F45252'; // red
-
 var player2 = Body.create({
-            parts: [player2Body
-              //, playerFloorSensor
-            ],
+            parts: [player2Body],
             friction:0
 });
 player2Body.col = '#409BE7'; // blue
@@ -88,7 +79,7 @@ var wall2 = Bodies.rectangle(window.innerWidth/2,  window.innerHeight /2, 500, 2
     isStatic: true,
     angle:-0.2
 });
-World.add(engine.world, [stackA, wall,wall2, player, player2]);
+World.add(engine.world, [stackA, wall, wall2, player1, player2]);
 
 var offset = 1;
 var wallSize = 20;
@@ -122,33 +113,27 @@ MouseConstraint.create(engine, {
 (
     function render() {
     // keep player at 0 rotation
-    Body.setAngle(player, 0);
+    Body.setAngle(player1, 0);
+    Body.setAngle(player2, 0);
 
     // react to key commands and apply force as needed
 
-    /* this is "jumping"
-    if((keys[KEY_SPACE] || keys[KEY_W]) && playerOnFloor){
-        let force = (-0.013 * player.mass) ;
-        Body.applyForce(player,player.position,{x:0,y:force});
-    }
-    */
-
     // Player 1 uses WASD to control
     if(keys[KEY_W]){ // Move up
-        let force = (-0.0004 * player.mass) ;
-        Body.applyForce(player,player.position,{x:0,y:force});
+        let force = (-0.0004 * player1.mass) ;
+        Body.applyForce(player1,player1.position,{x:0,y:force});
     }
     if(keys[KEY_S]){ // Move down
-        let force = (0.0004 * player.mass) ;
-        Body.applyForce(player,player.position,{x:0,y:force});
+        let force = (0.0004 * player1.mass) ;
+        Body.applyForce(player1,player1.position,{x:0,y:force});
     }
     if(keys[KEY_A]){ // Move left
-        let force = (-0.0004 * player.mass) ;
-        Body.applyForce(player,player.position,{x:force,y:0});
+        let force = (-0.0004 * player1.mass) ;
+        Body.applyForce(player1,player1.position,{x:force,y:0});
     }
     if(keys[KEY_D]){ // Move right
-        let force = (0.0004 * player.mass) ;
-        Body.applyForce(player,player.position,{x:force,y:0});
+        let force = (0.0004 * player1.mass) ;
+        Body.applyForce(player1,player1.position,{x:force,y:0});
     }
 
     // Player 2 uses WASD to control
@@ -200,8 +185,8 @@ MouseConstraint.create(engine, {
     ctx.fill();
 
     // fill player separately
-    fillObject(playerBody);
-
+    fillObject(player1Body);
+    fillObject(player2Body);
 
 })();
 
@@ -229,52 +214,6 @@ Events.on(mouseConstraint, 'mouseup', function(event) {
     mp = mousePosition;
     mouseIsDown = false;
 });
-
-Events.on(engine, 'collisionStart', function(event) {
-    var pairs = event.pairs;
-
-    for (var i = 0, j = pairs.length; i != j; ++i) {
-        var pair = pairs[i];
-
-        if (pair.bodyA === playerFloorSensor) {
-            playerBody.col = '#ddddFF';
-        } else if (pair.bodyB === playerFloorSensor) {
-            playerBody.col = '#ddddFF';
-        }
-    }
-})
-
-Events.on(engine, 'collisionEnd', function(event) {
-    var pairs = event.pairs;
-
-    for (var i = 0, j = pairs.length; i != j; ++i) {
-        var pair = pairs[i];
-
-        if (pair.bodyA === playerFloorSensor) {
-            playerBody.col = '#FFdddd';
-            playerOnFloor = false;
-        } else if (pair.bodyB === playerFloorSensor) {
-            playerBody.col = '#FFdddd';
-            playerOnFloor = false;
-        }
-    }
-})
-
- Events.on(engine, 'collisionActive', function(event) {
-    var pairs = event.pairs;
-
-    for (var i = 0, j = pairs.length; i != j; ++i) {
-        var pair = pairs[i];
-
-        if (pair.bodyA === playerFloorSensor) {
-            playerBody.col = '#DDFFDD';
-            playerOnFloor = true;
-        } else if (pair.bodyB === playerFloorSensor) {
-            playerBody.col = '#DDFFDD';
-            playerOnFloor = true;
-        }
-    }
-})
 
 document.body.addEventListener("keyup", function(e) {
   keys[e.keyCode] = false;
