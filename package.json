@@ -7,7 +7,7 @@
     "start": "node server.js",
     "dev": "webpack && npm start",
     "build": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress"
   },
   "repository": {
     "type": "git",
