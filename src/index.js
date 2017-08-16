@@ -13,6 +13,10 @@ const KEY_RIGHT = 39;
 const KEY_SPACE = 32;
 const KEY_SHIFT = 16;
 
+const RED = '#F45252';
+const BLUE = '#409BE7';
+const YELLOW = '#FFEF99';
+
 
 var c = document.getElementById("cv");
 var ctx = c.getContext("2d");
@@ -48,26 +52,26 @@ engine.world.gravity.y = 0.0;
 // hook in mouse control
 var mouseConstraint = MouseConstraint.create(engine, { element: c });
 
-var stackA = Composites.stack(window.innerWidth/2 -75, 150, 15, 15, 2, 2, function(x, y) {
+// Add lots of balls
+var miniBalls = Composites.stack(window.innerWidth/2 -75, 150, 15, 15, 2, 2, function(x, y) {
     return Bodies.circle(x, y, 3,{friction:0});
 });
 
-//access stackA elements with:   stackA.bodies[i]   i = 1 through 6x6
 var player1Body = Bodies.circle(window.innerWidth/2,225,10,{density:0.002, friction:0.5});
+player1Body.col = RED;
 
 var player1 = Body.create({
             parts: [player1Body],
             friction:0
 });
-player1Body.col = '#F45252'; // red
 
 var player2Body = Bodies.circle(window.innerWidth/2,225,10,{density:0.002, friction:0.5});
+player2Body.col = BLUE;
 
 var player2 = Body.create({
             parts: [player2Body],
             friction:0
 });
-player2Body.col = '#409BE7'; // blue
 
 
 var wall = Bodies.rectangle(window.innerWidth/2,  window.innerHeight /2, 500, 20, {
@@ -79,7 +83,7 @@ var wall2 = Bodies.rectangle(window.innerWidth/2,  window.innerHeight /2, 500, 2
     isStatic: true,
     angle:-0.2
 });
-World.add(engine.world, [stackA, wall, wall2, player1, player2]);
+World.add(engine.world, [miniBalls, wall, wall2, player1, player2]);
 
 var offset = 1;
 var wallSize = 20;
@@ -105,9 +109,7 @@ World.add(engine.world, [
 // run the engine
 Engine.run(engine);
 
-MouseConstraint.create(engine, {
-            element: c
-});
+MouseConstraint.create(engine, { element: c });
 
 //render
 (
