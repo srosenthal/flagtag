@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "webpack && npm start",
-    "postinstall": "webpack"
+    "postinstall": "webpack",
+    "lint": "jshint src/**.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/srosenthal/flagtag#readme",
   "devDependencies": {
+    "jshint": "^2.9.5",
     "webpack": "^3.5.4"
   },
   "dependencies": {

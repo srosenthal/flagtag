@@ -1,4 +1,4 @@
-import Matter from 'matter-js'
+import Matter from 'matter-js';
 
 const KEY_W = 87;
 const KEY_A = 65;
